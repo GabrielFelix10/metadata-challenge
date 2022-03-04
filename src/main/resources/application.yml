@@ -1,0 +1,9 @@
+spring:
+  application.name: metadata-class
+  profiles.active: local
+
+springdoc.api-docs:
+  path: /swagger-ui
+
+server:
+  port: 9094
