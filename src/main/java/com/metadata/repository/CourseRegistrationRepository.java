@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -19,10 +20,15 @@ public interface CourseRegistrationRepository extends CrudRepository<CourseRegis
     @JsonIgnore
     long countByStudentId(Long studentId);
 
+    @Query(value = "select count(course_id) from course_registration where course_id = ?1" ,
+            nativeQuery = true)
     @JsonIgnore
-    long countByCourse(Course course);
+    long countByCourse(Long courseId);
 
 
     Optional<CourseRegistration> findByStudentAndCourse(Student student, Course course);
+
+    Optional<List<CourseRegistration>> findAllByStudent(Student student);
+    Optional<List<CourseRegistration>> findAllByCourse(Course course);
 
 }
