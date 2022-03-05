@@ -1,19 +1,11 @@
 spring:
-  datasource:
-    url: jdbc:h2:mem:mydb
-    username: sa
-    password: password
-    driverClassName: org.h2.Driver
-
-  jpa.database-platform: org.hibernate.dialect.H2Dialect
   application.name: metadata-class
   profiles.active: local
-  jpa.show_sql: true
-  jpa.properties.hibernate.use_sql_comments: true
-  jpa.properties.hibernate.format_sql: true
-  jpa.properties.hibernate.ddl-auto=true: true
-  h2:
-    console.enabled: true
+  datasource:
+    url: jdbc:mysql://mysql_db:3306/java_to_dev_app_db
+    username: java_to_dev
+    password: abc
+    initialization-mode: always
 
 springdoc.api-docs:
   path: /swagger-ui
