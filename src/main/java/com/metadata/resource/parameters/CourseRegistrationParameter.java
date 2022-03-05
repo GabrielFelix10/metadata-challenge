@@ -18,4 +18,12 @@ public class CourseRegistrationParameter {
         this.studentId = studentId;
         this.courseId = courseId;
     }
+
+    public Long getStudentId() {
+        return studentId;
+    }
+
+    public Long getCourseId() {
+        return courseId;
+    }
 }
