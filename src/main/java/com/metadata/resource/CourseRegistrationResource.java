@@ -1,12 +1,11 @@
 package com.metadata.resource;
 
+import com.metadata.exception.RecordAlreadyExist;
 import com.metadata.resource.parameters.CourseRegistrationParameter;
 import com.metadata.service.CourseRegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -16,6 +15,7 @@ public class CourseRegistrationResource {
     @Autowired
     private CourseRegistrationService service;
 
+    @ExceptionHandler(RecordAlreadyExist.class)
     @PostMapping("/course/registration")
     public ResponseEntity<String> persistPartner(@Valid @RequestBody final CourseRegistrationParameter parameter) {
 
@@ -23,5 +23,6 @@ public class CourseRegistrationResource {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.noContent().build());
     }
+
 }
 
