@@ -8,9 +8,9 @@ public class CourseRegistrationParameter {
 
     @NotNull(message = "Nome nao pode ser nulo ou invalido")
     @JsonProperty
-    private String studentId;
+    private Long studentId;
 
     @NotNull(message = "Nome do dono nao pode ser nulo ou invalido")
     @JsonProperty
-    private String courseId;
+    private Long courseId;
 }

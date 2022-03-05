@@ -6,7 +6,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
-class CourseRegistration {
+public class CourseRegistration {
 
     @Id
     Long id;
