@@ -1,6 +1,9 @@
 spring:
   application.name: metadata-class
   profiles.active: local
+  jpa.properties.hibernate.show_sql: true
+  jpa.properties.hibernate.use_sql_comments: true
+  jpa.properties.hibernate.format_sql: true
 
 springdoc.api-docs:
   path: /swagger-ui
