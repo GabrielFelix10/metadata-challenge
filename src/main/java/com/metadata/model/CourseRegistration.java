@@ -29,6 +29,11 @@ public class CourseRegistration {
         this.course = course;
     }
 
+    public CourseRegistration( Student student, Course course) {
+        this.student = student;
+        this.course = course;
+    }
+
     public CourseRegistration() {
 
     }

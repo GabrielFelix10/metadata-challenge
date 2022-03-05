@@ -1,6 +1,7 @@
 package com.metadata.service;
 
 import com.metadata.exception.CourseExceedLimitException;
+import com.metadata.exception.RecordAlreadyExist;
 import com.metadata.exception.StudentsExceedLimitException;
 import com.metadata.model.Course;
 import com.metadata.model.Student;
@@ -30,34 +31,42 @@ public class CourseRegistrationService {
     private CourseRepository courseRepository;
 
     public Optional<String> associateStudentToCourse(CourseRegistrationParameter parameter) {
-        studentRepository.
-                findById(parameter.getStudentId())
-                .ifPresent(this::verifyLimitCoursesPerStudent);
+        var student = studentRepository.
+                    findById(parameter.getStudentId())
+                    .map(this::verifyLimitCoursesPerStudent);
 
-        courseRepository.
-                findById(parameter.getCourseId())
-                .ifPresent(this::verifyLimitStudentInCoure);
+        var course = courseRepository.
+                 findById(parameter.getCourseId())
+                .map(this::verifyLimitStudentInCoure);
 
-        var courseRegistration = mapper.courseRegistrationParameterToCourseRegistration(parameter);
+        var courseRegistration = mapper.courseRegistrationParameterToCourseRegistration(student.get(), course.get());
+
+        courseRegistrationRepository.findByStudentAndCourse(student.get(), course.get())
+                    .ifPresent(seller -> { throw new RecordAlreadyExist("Already exist a register with this values");});
+
+        courseRegistrationRepository.save(courseRegistration);
 
         return Optional.of(String.valueOf(courseRegistrationRepository.save(courseRegistration).getId()));
     }
 
 
-    private void verifyLimitCoursesPerStudent(Student student){
-        var quantity = courseRegistrationRepository.countByStudent(student);
+    private Student verifyLimitCoursesPerStudent(Student student){
+        var quantity = courseRegistrationRepository.countByStudentId(student.getId());
 
         if  (!(quantity < 5)) {
             throw new CourseExceedLimitException("Course exceed the limit maximum of students");
         }
+
+        return student;
     }
 
-    private void verifyLimitStudentInCoure(Course course){
+    private Course verifyLimitStudentInCoure(Course course){
         var quantity = courseRegistrationRepository.countByCourse(course);
 
         if  (!(quantity < 5)) {
             throw new StudentsExceedLimitException("Course exceed the limit maximum of students");
         }
 
+        return course;
     }
 }

@@ -6,6 +6,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Set;
 
 @Data
@@ -20,6 +21,8 @@ public class Student {
 
     @JsonProperty
     @NotNull(message = "Name can't be null or invalid")
+    @Column(unique=true)
+    @Size(max = 20)
     private String firstName;
 
     @JsonIgnore
@@ -31,6 +34,14 @@ public class Student {
         this.id = id;
         this.firstName = firstName;
         this.registrations = registrations;
+    }
+
+    public Student(String firstName) {
+        this.id = id;
+        this.firstName = firstName;
+    }
+
+    public Student() {
     }
 
     public long getId() {

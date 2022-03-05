@@ -32,6 +32,8 @@ public class Course {
         this.registrations = registrations;
     }
 
+    public Course() {
+    }
 
     public long getId() {
         return id;
