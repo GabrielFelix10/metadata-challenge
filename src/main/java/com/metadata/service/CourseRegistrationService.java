@@ -15,7 +15,6 @@ import com.metadata.service.mapper.CourseRegistrationMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -50,8 +49,6 @@ public class CourseRegistrationService {
 
         courseRegistrationRepository.findByStudentAndCourse(student, course)
                     .ifPresent(register -> { throw new RecordAlreadyExist("Already exist a register with this values");});
-
-        courseRegistrationRepository.save(courseRegistration);
 
         return Optional.of(String.valueOf(courseRegistrationRepository.save(courseRegistration).getId()));
     }
