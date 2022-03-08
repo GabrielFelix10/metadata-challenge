@@ -25,6 +25,8 @@ dependencies {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
 
+	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+
 	// Swagger - Documentação de API
 	implementation 'org.springdoc:springdoc-openapi-ui:1.6.4'
 	implementation 'org.springdoc:springdoc-openapi-data-rest:1.6.4'
@@ -35,6 +37,12 @@ dependencies {
 
 }
 
-tasks.named('test') {
-	useJUnitPlatform()
+
+test {
+	doFirst {
+		filter.includePatterns.each {
+			include "${it.replaceAll('\\.', "\\${File.separator}")}.class"
+		}
+		filter.setIncludePatterns('*')
+	}
 }

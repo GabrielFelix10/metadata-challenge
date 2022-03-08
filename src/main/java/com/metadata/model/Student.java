@@ -37,7 +37,6 @@ public class Student {
     }
 
     public Student(String firstName) {
-        this.id = id;
         this.firstName = firstName;
     }
 

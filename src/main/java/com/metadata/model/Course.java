@@ -35,6 +35,10 @@ public class Course {
         this.registrations = registrations;
     }
 
+    public Course(String firstName) {
+        this.name = firstName;
+    }
+
     public Course() {
     }
 
