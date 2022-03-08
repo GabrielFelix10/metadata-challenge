@@ -58,7 +58,7 @@ public class CourseRegistrationService {
         var quantity = courseRegistrationRepository.countByStudentId(student.getId());
 
         if  (!(quantity < 5)) {
-            throw new CourseExceedLimitException("Course exceed the limit maximum of students");
+            throw new CourseExceedLimitException("Student exceed the limit maximum of courses");
         }
 
         return student;
