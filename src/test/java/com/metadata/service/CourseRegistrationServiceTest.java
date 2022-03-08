@@ -124,7 +124,7 @@ public class CourseRegistrationServiceTest {
     }
 
     @Test(expected = RecordAlreadyExist.class)
-    public void shouldThrowCourseExistent(){
+    public void shouldThrowRecordAlreadyExist(){
         var parameter = CourseRegistrationParameterMock.mock();
         var courseRegistration = CourseRegistrationMock.mock(StudentMock.mock(), CourseMock.mock());
         var student = StudentMock.mock();
