@@ -1,6 +1,9 @@
 package com.metadata.service;
 
+import com.metadata.exception.CourseExceedLimitException;
 import com.metadata.exception.RecordAlreadyExist;
+import com.metadata.exception.RecordNotExist;
+import com.metadata.exception.StudentsExceedLimitException;
 import com.metadata.mock.CourseMock;
 import com.metadata.mock.CourseRegistrationMock;
 import com.metadata.mock.CourseRegistrationParameterMock;
@@ -74,8 +77,8 @@ public class CourseRegistrationServiceTest {
         assertEquals(String.valueOf(courseRegistration.getId()), result.get());
     }
 
-    @Test(expected = RecordAlreadyExist.class)
-    public void shouldNotAssociateAndThrowCourseExistent(){
+    @Test(expected = CourseExceedLimitException.class)
+    public void shouldNotAssociateWhenCourseExceedLimit(){
         var parameter = CourseRegistrationParameterMock.mock();
         var courseRegistration = CourseRegistrationMock.mock(StudentMock.mock(), CourseMock.mock());
         var student = StudentMock.mock();
@@ -89,6 +92,63 @@ public class CourseRegistrationServiceTest {
 
         when(courseRegistrationRepository.findByStudentAndCourse(student, course))
                 .thenReturn(Optional.of(courseRegistration));
+
+        when(courseRegistrationRepository.countByStudentId(any())).thenReturn(6l);
+
+        courseRegistrationService.associateStudentToCourse(parameter);
+
+    }
+
+    @Test(expected = StudentsExceedLimitException.class)
+    public void shouldNotAssociateWhenStudentExceedLimit(){
+        var parameter = CourseRegistrationParameterMock.mock();
+        var courseRegistration = CourseRegistrationMock.mock(StudentMock.mock(), CourseMock.mock());
+        var student = StudentMock.mock();
+        var course = CourseMock.mock();
+
+        when(studentRepository.findById(parameter.getStudentId())).thenReturn(Optional.of(student));
+
+        when(courseRepository.findById(parameter.getCourseId())).thenReturn(Optional.of(course));
+
+        when(mapper.courseRegistrationParameterToCourseRegistration(student, course)).thenReturn(courseRegistration);
+
+        when(courseRegistrationRepository.findByStudentAndCourse(student, course))
+                .thenReturn(Optional.of(courseRegistration));
+
+        when(courseRegistrationRepository.countByStudentId(any())).thenReturn(0l);
+
+        when(courseRegistrationRepository.countByCourse(any())).thenReturn(51l);
+
+        courseRegistrationService.associateStudentToCourse(parameter);
+
+    }
+
+    @Test(expected = RecordAlreadyExist.class)
+    public void shouldThrowCourseExistent(){
+        var parameter = CourseRegistrationParameterMock.mock();
+        var courseRegistration = CourseRegistrationMock.mock(StudentMock.mock(), CourseMock.mock());
+        var student = StudentMock.mock();
+        var course = CourseMock.mock();
+
+        when(studentRepository.findById(parameter.getStudentId())).thenReturn(Optional.of(student));
+
+        when(courseRepository.findById(parameter.getCourseId())).thenReturn(Optional.of(course));
+
+        when(mapper.courseRegistrationParameterToCourseRegistration(student, course)).thenReturn(courseRegistration);
+
+        when(courseRegistrationRepository.findByStudentAndCourse(student, course))
+                .thenReturn(Optional.of(courseRegistration));
+
+        courseRegistrationService.associateStudentToCourse(parameter);
+
+    }
+
+    @Test(expected = RecordNotExist.class)
+    public void shouldThrowRecordNotExist(){
+        var parameter = CourseRegistrationParameterMock.mock();
+
+        when(studentRepository.findById(parameter.getStudentId())).thenReturn(Optional.empty());
+
 
         courseRegistrationService.associateStudentToCourse(parameter);
 
